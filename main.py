@@ -1,3 +1,4 @@
+import datetime
 import sys
 from pprint import pprint
 import pandas as pd
@@ -7,26 +8,27 @@ def main_menu():
     '''
     Функция для главного меню.
     '''
-    print('Список команд: /help\n')
+    print('Для старта программы введите: /start\n'
+          'Список команд: /help\n')
     user_command = input('Введите команду:\n')
 
     while True:
         if user_command == '/help':
             print('Список команд:\n'
-                   '/help --- список команд\n'
                    '/start --- запустить программу.\n'
-                   '/export --- экспортировать данные в эксель.\n'
                    '/quit --- выйти из программы')
             user_command = input('Введите команду:\n')
         if user_command == '/quit':
             sys.exit()
         if user_command == '/start':
             salary(SALARY=37_500)
-        if user_command == '/export':
-            export_csv()
         else:
+            print('Что-то пошло не так.\n'
+                  'Возвращаемся в главное меню...\n')
             main_menu()
 
+
+# SALARY=37_500 - это окладная часть за вычетом налога!
 def salary(SALARY=37_500):
     '''
     Расчет заработной платы сотрудника
@@ -92,7 +94,7 @@ def salary(SALARY=37_500):
                     print(f'Зарплата сотрудника {staff_name}, с учетом вычета 13%, составляет: {pure_employee_salary}\n\n')
                     list_staff_salary.append(pure_employee_salary)
                 if number_of_sales >= 5:
-                    employee_salary = ((sum_contract / 100 * staff_qualification) * 1.2)
+                    employee_salary = ((sum_contract / 100 * staff_qualification) * 1.5)
                     tax_employee_salary = employee_salary * 0.13
                     pure_employee_salary = (employee_salary - tax_employee_salary) + SALARY
                     print(f'Зарплата сотрудника {staff_name}, с учетом вычета 13%, составляет: {pure_employee_salary}\n\n')
@@ -103,6 +105,7 @@ def salary(SALARY=37_500):
                 pure_employee_salary = (employee_salary - tax_employee_salary) + SALARY
                 print(f'Зарплата сотрудника {staff_name}, с учетом вычета 13%, составляет: {pure_employee_salary}\n\n')
                 list_staff_salary.append(pure_employee_salary)
+
             staff_list_dict = {
                 'ФИО сотрудника': list_staff_names,
                 'Квалификация (процент от сделки)': list_staff_qualifications,
@@ -110,6 +113,7 @@ def salary(SALARY=37_500):
                 'Зарплата': list_staff_salary,
                 'Общая сумма реализации': list_sum_contract,
             }
+
     user_command = input('Хотите экспортировать данные в эксель? Да или Нет (введите ответ): ')
     if user_command == 'Да':
         export_csv(staff_list_dict)
@@ -119,9 +123,22 @@ def salary(SALARY=37_500):
 
 
 def export_csv(staff_list_dict):
+    data_date = datetime.date.today()
+    print(data_date)
     df = pd.DataFrame(staff_list_dict)
-    df.to_excel('./salary.xlsx')
-    print('Экспорт прошел успешно!')
+    try:
+        df.to_excel(f'./{data_date}_salary.xlsx')
+        print('...\n'
+              'Экспорт прошел успешно!\n'
+              'Файл создан в текущей директории\n'
+              'Возвращаемся в главное меню...\n')
+    except:
+        print('Произошла ошибка')
+    finally:
+        main_menu()
+
 
 if __name__ == '__main__':
+    print('Github: https://github.com/fes323/salesperson-salary-calculator\n'
+          'Автор: Maksim Legeyda (fes323)\n')
     main_menu()
