@@ -33,6 +33,7 @@ def salary(SALARY=37_500):
     '''
     Расчет заработной платы сотрудника
     '''
+    print(f'Внимание!!! Оклад (с учетом вычета налога) указан {SALARY}\n')
     user_command = int(input('Введите количество сотрудников для расчета зарплаты: '))
 
     list_staff_names = []
@@ -76,35 +77,23 @@ def salary(SALARY=37_500):
             print(f'Общая сумма реализации: {sum_contract}')
             if number_of_sales > 1:
                 if number_of_sales == 2:
-                    employee_salary = ((sum_contract / 100 * staff_qualification) * 1.2)
-                    tax_employee_salary = employee_salary * 0.13
-                    pure_employee_salary = (employee_salary - tax_employee_salary) + SALARY
-                    print(f'Зарплата сотрудника {staff_name}, с учетом вычета 13%, составляет: {pure_employee_salary}\n\n')
-                    list_staff_salary.append(pure_employee_salary)
+                    motivation = 1.2
                 if number_of_sales == 3:
-                    employee_salary = ((sum_contract / 100 * staff_qualification) * 1.3)
-                    tax_employee_salary = employee_salary * 0.13
-                    pure_employee_salary = (employee_salary - tax_employee_salary) + SALARY
-                    print(f'Зарплата сотрудника {staff_name}, с учетом вычета 13%, составляет: {pure_employee_salary}\n\n')
-                    list_staff_salary.append(pure_employee_salary)
+                    motivation = 1.3
                 if number_of_sales == 4:
-                    employee_salary = ((sum_contract / 100 * staff_qualification) * 1.4)
-                    tax_employee_salary = employee_salary * 0.13
-                    pure_employee_salary = (employee_salary - tax_employee_salary) + SALARY
-                    print(f'Зарплата сотрудника {staff_name}, с учетом вычета 13%, составляет: {pure_employee_salary}\n\n')
-                    list_staff_salary.append(pure_employee_salary)
+                    motivation = 1.4
                 if number_of_sales >= 5:
-                    employee_salary = ((sum_contract / 100 * staff_qualification) * 1.5)
-                    tax_employee_salary = employee_salary * 0.13
-                    pure_employee_salary = (employee_salary - tax_employee_salary) + SALARY
-                    print(f'Зарплата сотрудника {staff_name}, с учетом вычета 13%, составляет: {pure_employee_salary}\n\n')
-                    list_staff_salary.append(pure_employee_salary)
+                    motivation = 1.5
+                employee_salary = ((sum_contract / 100 * staff_qualification) * motivation)
+
             if number_of_sales == 1:
                 employee_salary = sum_contract / 100 * staff_qualification
-                tax_employee_salary = employee_salary * 0.13
-                pure_employee_salary = (employee_salary - tax_employee_salary) + SALARY
-                print(f'Зарплата сотрудника {staff_name}, с учетом вычета 13%, составляет: {pure_employee_salary}\n\n')
-                list_staff_salary.append(pure_employee_salary)
+
+            tax_employee_salary = employee_salary * 0.13
+            pure_employee_salary = (employee_salary - tax_employee_salary) + SALARY
+            print(
+                f'Зарплата сотрудника {staff_name}, с учетом вычета 13%, составляет: {round(pure_employee_salary, 2)}\n\n')
+            list_staff_salary.append(pure_employee_salary)
 
             staff_list_dict = {
                 'ФИО сотрудника': list_staff_names,
@@ -133,7 +122,7 @@ def export_csv(staff_list_dict):
               'Файл создан в текущей директории\n'
               'Возвращаемся в главное меню...\n')
     except:
-        print('Произошла ошибка')
+        print('Произошла ошибка\n')
     finally:
         main_menu()
 
